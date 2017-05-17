@@ -14,34 +14,40 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author Afzal
  */
 public class SavingsAccountView {
-    
+
     private float Balance;
+    private boolean valid;
+    private int Attempts = 3;
 
     public void viewpage(ArrayList userdetails) {
 
         JLabel UserNameLabel = new JLabel((String) userdetails.get(2));
         UserNameLabel.setBounds(370, 100, 100, 25);
-        
-        JLabel AccountIdLabel = new JLabel("Savings Account Id - "+(String) userdetails.get(3));
+
+        JLabel AccountIdLabel = new JLabel("Savings Account Id - " + (String) userdetails.get(3));
         AccountIdLabel.setBounds(470, 100, 300, 25);
-        
+
         JButton CheckBalanceButton = new JButton("Check Balance");
         CheckBalanceButton.setBounds(400, 150, 200, 30);
 
         JButton TransferAmountButton = new JButton("Transfer Amount");
         TransferAmountButton.setBounds(400, 210, 200, 30);
 
-        JButton DepositAmountButton = new JButton("Deposit Button");
+        JButton DepositAmountButton = new JButton("Deposit Amount");
         DepositAmountButton.setBounds(400, 270, 200, 30);
 
         JButton WithdrawAmountButton = new JButton("Withdraw Amount");
         WithdrawAmountButton.setBounds(400, 330, 200, 30);
+
+        JButton ViewTransactionsButton = new JButton("View all Transactions");
+        ViewTransactionsButton.setBounds(400, 390, 200, 30);
 
         JButton LogOutButton = new JButton("Log out");
         LogOutButton.setBounds(950, 20, 80, 25);
@@ -58,6 +64,7 @@ public class SavingsAccountView {
         SavingsPanel.add(WithdrawAmountButton);
         SavingsPanel.add(DepositAmountButton);
         SavingsPanel.add(CheckBalanceButton);
+        SavingsPanel.add(ViewTransactionsButton);
         SavingsPanel.add(HomeButton);
 
         JFrame frame = new JFrame("Banking Software Prototype");
@@ -67,37 +74,105 @@ public class SavingsAccountView {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        HomeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                UserView v = new UserView();
-                userdetails.remove(3);
-                v.mainPage(userdetails);
-            }
-        });
+        try {
 
-        LogOutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String message = " Confirm Log Out ? ";
-                String title = "Log Out";
-                int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.YES_OPTION) {
+            HomeButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
                     frame.dispose();
-                    new LogInView();
+                    UserView v = new UserView();
+                    userdetails.remove(3);
+                    v.mainPage(userdetails);
+                }
+            });
+
+            LogOutButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String message = " Confirm Log Out ? ";
+                    String title = "Log Out";
+                    int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) {
+                        frame.dispose();
+                        new LogInView();
+                    }
+
+                }
+            });
+
+            CheckBalanceButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    Balance = c.checkBalance(userdetails);
+                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                }
+            });
+
+            TransferAmountButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    Balance = c.checkBalance(userdetails);
+                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                }
+            });
+
+            WithdrawAmountButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    Balance = c.checkBalance(userdetails);
+                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                }
+            });
+
+            DepositAmountButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    UserView uv = new UserView();
+                    valid = uv.enterPin(userdetails, Attempts);
+                    if (valid == true) {
+                        JTextField tf = new JTextField();
+                        String Amount = JOptionPane.showInputDialog(
+                                tf, null,
+                                "Enter the Amount to be withdrawn.",
+                                JOptionPane.OK_CANCEL_OPTION
+                        );
+
+                        int number = Integer.parseInt(Amount);
+
+                        if (c.depositAmount(userdetails, Amount) == true) {
+                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been deposited with " + Amount + " successfully..!!", "Deposit",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+
+                        }
+
+                    } else {
+
+                        frame.dispose();
+
+                    }
                 }
 
-            }
-        });
-        
-        CheckBalanceButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                BSPController c = new BSPController();
-                Balance=c.checkBalance(userdetails);
-                JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is "+Balance, "Balance",
-        JOptionPane.INFORMATION_MESSAGE);
+            });
 
-            }
-        });
+            ViewTransactionsButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    Balance = c.checkBalance(userdetails);
+                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                }
+            });
+
+        } catch (NumberFormatException en) {
+            JOptionPane.showMessageDialog(frame, "Number not found! Please enter an Amount.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
 
     }
 

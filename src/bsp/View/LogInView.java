@@ -71,20 +71,30 @@ public class LogInView {
                 try {
 
                     ArrayList credentials = new ArrayList();
-                    credentials.add(userId.getText());
-                    String passText = new String(password.getPassword());
-                    credentials.add(passText);
-                    ArrayList value = controller.checkLogin(credentials);
+                    int number = Integer.parseInt(userId.getText());
 
-                    if (value.get(2).equals("error")) {
-                        JOptionPane.showMessageDialog(loginPanel, "User does not exist", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    else {
-                        frame.dispose();
+                    credentials.add(userId.getText());
+
+                    String passText = new String(password.getPassword());
+                    if (passText.equals(null) || passText.equals("")) {
+                        JOptionPane.showMessageDialog(frame, "Password cannot be empty. Please provide a password", "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        credentials.add(passText);
+                        ArrayList value = controller.checkLogin(credentials);
+
+                        if (value.get(2).equals("error")) {
+                            JOptionPane.showMessageDialog(loginPanel, "User does not exist", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            frame.dispose();
+                        }
+
                     }
 
                 } catch (SQLException ex) {
                     Logger.getLogger(LogInView.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NumberFormatException en) {
+                    JOptionPane.showMessageDialog(frame, "Number not found! Please enter a number in User Id.", "Error", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
 

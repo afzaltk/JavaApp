@@ -20,12 +20,14 @@ import javax.swing.JPasswordField;
  *
  * @author Afzal
  */
-public class TermDepositAccountView {
+public class TermDepositAccountView extends UserView {
 
     private float Balance;
     private float Penalty;
     private float Interest;
-    private String pin;
+    private String Pin;
+    private int Attempts = 3;
+    private boolean valid;
 
     public void viewpage(ArrayList userdetails) {
 
@@ -96,17 +98,14 @@ public class TermDepositAccountView {
         });
 
         WithdrawAmountButton.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 BSPController ct = new BSPController();
-                JPasswordField pf = new JPasswordField();
-                pin = JOptionPane.showInputDialog(
-                        pf, null,
-                        "Enter the 4 digit PIN to continue (" + 36 + " tries left)",
-                        JOptionPane.WARNING_MESSAGE
-                );
 
-                boolean valid = ct.verifyPin(userdetails, pin);
+                UserView uv = new UserView();
+                valid = uv.enterPin(userdetails, Attempts);
                 if (valid == true) {
+                    System.out.println("when valid is true in term view");
                     Interest = ct.checkInterest(userdetails);
                     Penalty = ct.checkPenalty(userdetails);
 
@@ -118,7 +117,7 @@ public class TermDepositAccountView {
                         update = ct.withdrawAmount(userdetails, Interest, Penalty);
                         if (update == true) {
                             JOptionPane.showMessageDialog(TermDepositPanel, "Your Withdrawn Amount has been transferred to your Savings Account", null,
-                        JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.INFORMATION_MESSAGE);
                             frame.dispose();
                             userdetails.remove(3);
                             UserView v = new UserView();
@@ -129,11 +128,16 @@ public class TermDepositAccountView {
                         }
 
                     }
-                } 
 
+                }
+                else {
+                    
+                    frame.dispose();
+                    
+                }
             }
+
         });
 
     }
-
 }

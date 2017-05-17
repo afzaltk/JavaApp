@@ -7,6 +7,7 @@ package bsp.Controller;
 
 import bsp.Model.Account;
 import bsp.Model.BankModel;
+import bsp.Model.SavingsAccountModel;
 import bsp.Model.TermDepositAccountModel;
 import bsp.View.AdminView;
 import bsp.View.LogInView;
@@ -120,6 +121,25 @@ public class BSPController {
         return valid;
         
     }
+
+     public boolean blockAccount(ArrayList UserDetails) {
+    Account A = new Account();
+    A.blockAccount(UserDetails);
+    return false;
+    }
+
+   public boolean depositAmount(ArrayList userdetails, String Amount) {
+       SavingsAccountModel sam=new SavingsAccountModel();
+      return (sam.depositAmount(userdetails,Amount));
+       
+       
+   }
+
+    public void withdrawAmount(ArrayList userdetails, String Amount) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
    
 
 }

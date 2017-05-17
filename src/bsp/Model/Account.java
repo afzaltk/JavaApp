@@ -80,4 +80,18 @@ public class Account {
         return valid;
            }
 
+    public boolean blockAccount(ArrayList UserDetails) {
+        con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            query = "update user_account set isBlocked=0 where account_id = " + UserDetails.get(3);
+           st.executeUpdate(query);
+              valid=true;
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return valid;
+         }
+
 }
