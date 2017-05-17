@@ -135,8 +135,19 @@ public class BSPController {
        
    }
 
-    public void withdrawAmount(ArrayList userdetails, String Amount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean withdrawAmount(ArrayList userdetails, String Value) {
+        int Amount = Integer.parseInt(Value);
+        Account a=new Account();
+        Balance=a.checkBalance(userdetails);
+        if (Amount > Balance){
+            
+        return false;
+        }
+        else{
+            SavingsAccountModel sam=new SavingsAccountModel();
+            sam.withdrawAmount(userdetails,Amount);
+        }
+        return true;
     }
 
     

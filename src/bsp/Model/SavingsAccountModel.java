@@ -39,6 +39,21 @@ public class SavingsAccountModel {
         return true;
     }
 
+    public boolean withdrawAmount(ArrayList userdetails, int Amount) {
+        con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("INSERT INTO transactions (account_id, transaction_type, transaction_dt, amount)"
+                    + " VALUES (" + userdetails.get(3) + ",'C',now()," + Amount + ")");
+            st.executeUpdate("UPDATE current_balance SET current_balance=current_balance-" + Amount + " WHERE "
+                    + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=1 and user_id= '" + userdetails.get(0) + "')");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+          }
+
     
 
    

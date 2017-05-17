@@ -121,10 +121,26 @@ public class SavingsAccountView {
             WithdrawAmountButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     BSPController c = new BSPController();
-                    Balance = c.checkBalance(userdetails);
-                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                    UserView uv = new UserView();
+                    valid = uv.enterPin(userdetails, Attempts);
+                    if (valid == true) {
+                        JTextField tf = new JTextField();
+                        String Amount = JOptionPane.showInputDialog(
+                                tf, null,
+                                "Enter the Amount to be withdrawn.",
+                                JOptionPane.OK_CANCEL_OPTION
+                        );
+                        int number = Integer.parseInt(Amount);
+                        if (c.withdrawAmount(userdetails, Amount) == true) {
+                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been credited with " + Amount + " successfully..!!", "Deposit",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(SavingsPanel, "Unable to withdraw amount. Low Balance", "Balance",
                             JOptionPane.INFORMATION_MESSAGE);
-
+                        }
+                    } else {
+                        frame.dispose();
+                    }
                 }
             });
 
@@ -137,26 +153,21 @@ public class SavingsAccountView {
                         JTextField tf = new JTextField();
                         String Amount = JOptionPane.showInputDialog(
                                 tf, null,
-                                "Enter the Amount to be withdrawn.",
+                                "Enter the Amount to be deposited.",
                                 JOptionPane.OK_CANCEL_OPTION
                         );
-
                         int number = Integer.parseInt(Amount);
-
                         if (c.depositAmount(userdetails, Amount) == true) {
-                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been deposited with " + Amount + " successfully..!!", "Deposit",
+                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been debited with " + Amount + " successfully..!!", "Deposit",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
-
+                            JOptionPane.showMessageDialog(SavingsPanel, "Unable to deposit amount. Contact adminisrator", "Balance",
+                            JOptionPane.INFORMATION_MESSAGE);
                         }
-
                     } else {
-
                         frame.dispose();
-
                     }
                 }
-
             });
 
             ViewTransactionsButton.addActionListener(new ActionListener() {
