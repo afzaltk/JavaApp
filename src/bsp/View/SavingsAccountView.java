@@ -6,14 +6,20 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -25,6 +31,9 @@ public class SavingsAccountView {
     private float Balance;
     private boolean valid;
     private int Attempts = 3;
+    private HashMap TransactionData = new HashMap();
+    private Vector columnNamesVector = new Vector();
+    private Vector dataVector = new Vector();
 
     public void viewpage(ArrayList userdetails) {
 
@@ -136,7 +145,7 @@ public class SavingsAccountView {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(SavingsPanel, "Unable to withdraw amount. Low Balance", "Balance",
-                            JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else {
                         frame.dispose();
@@ -162,7 +171,7 @@ public class SavingsAccountView {
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(SavingsPanel, "Unable to deposit amount. Contact adminisrator", "Balance",
-                            JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else {
                         frame.dispose();
@@ -173,11 +182,36 @@ public class SavingsAccountView {
             ViewTransactionsButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     BSPController c = new BSPController();
-                    Balance = c.checkBalance(userdetails);
-                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    TransactionData = c.viewTransactionsController(userdetails);
+                    dataVector = (Vector) TransactionData.get(3);
+                    columnNamesVector = (Vector) TransactionData.get(4);
+                    JTable table = new JTable(dataVector, columnNamesVector) {
+                        public Class getColumnClass(int column) {
+                            for (int row = 0; row < getRowCount(); row++) {
+                                Object o = getValueAt(row, column);
+
+                                if (o != null) {
+                                    return o.getClass();
+                                }
+                            }
+
+                            return Object.class;
+                        }
+                    };
+
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    JPanel buttonPanel = new JPanel();
+
+                    JFrame TransactionsFrame = new JFrame("Savings Account Transactions");
+                    TransactionsFrame.setSize(866, 477);
+                    TransactionsFrame.add(scrollPane);
+                    TransactionsFrame.add(buttonPanel, BorderLayout.SOUTH);
+                    TransactionsFrame.setLocationRelativeTo(null);
+                    TransactionsFrame.setVisible(true);
 
                 }
+
             });
 
         } catch (NumberFormatException en) {

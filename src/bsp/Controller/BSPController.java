@@ -16,6 +16,8 @@ import bsp.View.TermDepositAccountView;
 import bsp.View.UserView;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 
 /**
  *
@@ -29,6 +31,11 @@ public class BSPController {
     private String AccountType;
     private float Penalty; 
     private float Interest; 
+    private HashMap TransactionData = new HashMap();
+    private ArrayList columnNames = new ArrayList();
+    private ArrayList data = new ArrayList();
+    private Vector columnNamesVector = new Vector();
+    private Vector dataVector = new Vector();
 
     public BSPController() {
 
@@ -148,6 +155,38 @@ public class BSPController {
             sam.withdrawAmount(userdetails,Amount);
         }
         return true;
+    }
+
+    public HashMap viewTransactionsController(ArrayList userdetails) {
+       SavingsAccountModel sam=new SavingsAccountModel();
+       
+            TransactionData=sam.viewTransactionsModel(userdetails);
+            columnNames=(ArrayList) TransactionData.get(1);
+            data=(ArrayList) TransactionData.get(2);
+            
+            for (int i = 0; i < data.size(); i++)
+        {
+            ArrayList subArray = (ArrayList)data.get(i);
+            Vector subVector = new Vector();
+            for (int j = 0; j < subArray.size(); j++)
+            {
+                subVector.add(subArray.get(j));
+            }
+            dataVector.add(subVector);
+        }
+            
+            for (int i = 0; i < columnNames.size(); i++ )
+            columnNamesVector.add(columnNames.get(i));
+
+            
+            TransactionData.put(3,dataVector);
+            TransactionData.put(4,columnNamesVector);
+            
+            return TransactionData;
+                    
+            
+            
+            
     }
 
     
