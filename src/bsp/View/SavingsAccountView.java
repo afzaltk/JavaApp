@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -76,12 +77,15 @@ public class SavingsAccountView {
         SavingsPanel.add(ViewTransactionsButton);
         SavingsPanel.add(HomeButton);
 
+        
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1066, 577);
         frame.add(SavingsPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
+        
 
         try {
 

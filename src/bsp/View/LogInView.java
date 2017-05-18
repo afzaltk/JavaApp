@@ -6,12 +6,15 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -59,9 +62,15 @@ public class LogInView {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1066, 577);
-        frame.add(loginPanel);
+        
 
-        frame.setLocationRelativeTo(null);
+        
+        loginPanel.setLayout(new BorderLayout());
+    JLabel background=new JLabel(new ImageIcon(getClass().getResource("/bsp/View/banking.jpg")));
+    loginPanel.add(background);
+    background.setLayout(new FlowLayout());
+    frame.add(loginPanel);
+    frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
 
