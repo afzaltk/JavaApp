@@ -44,7 +44,9 @@ public class BSPController {
     public void loginControl() {
         new LogInView();
     }
-
+ public void returnAdmin(String userID) {
+    
+    }
     public ArrayList checkLogin(ArrayList credentials) throws SQLException {
         BankModel model = new BankModel();
 
@@ -56,13 +58,34 @@ public class BSPController {
             UserView userview = new UserView();
             userview.welcomeUser(user);
         } else if (User.equals("admin")) {
-            new AdminView();
+           AdminView adminview = new AdminView();
+            adminview.welcomeUser(user);
 
         }
 
         return user;
 
     }
+	 public ArrayList getAccounts(String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getAccounts(userID);
+    }
+    
+    public ArrayList getUser(String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getUser(userID);
+    }
+    
+    public int getSavings(String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getBalance("Savings", userID);
+    }
+    
+    public int getSavingsID(String userID) throws SQLException {
+        BankModel model = new BankModel(); 	 	 	     
+        return model.getSavingsID(userID);
+    }
+
 
     
     public String savingsAccount(ArrayList userdetails) {
@@ -187,6 +210,11 @@ public class BSPController {
             
             
             
+    }
+	public ArrayList accountStatus(String accountID) throws SQLException
+    {
+        BankModel model = new BankModel();
+        return model.isBlockedisClosed(accountID);
     }
 
     
