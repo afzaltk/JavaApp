@@ -7,9 +7,11 @@ package bsp.Controller;
 
 import bsp.Model.Account;
 import bsp.Model.BankModel;
+import bsp.Model.HomeLoanAccountModel;
 import bsp.Model.SavingsAccountModel;
 import bsp.Model.TermDepositAccountModel;
 import bsp.View.AdminView;
+import bsp.View.HomeLoanAccountView;
 import bsp.View.LogInView;
 import bsp.View.SavingsAccountView;
 import bsp.View.TermDepositAccountView;
@@ -36,6 +38,7 @@ public class BSPController {
     private ArrayList data = new ArrayList();
     private Vector columnNamesVector = new Vector();
     private Vector dataVector = new Vector();
+    private ArrayList HomeLoanDetails = new ArrayList();
 
     public BSPController() {
 
@@ -180,10 +183,10 @@ public class BSPController {
         return true;
     }
 
-    public HashMap viewTransactionsController(ArrayList userdetails) {
+    public HashMap viewTransactionsController(ArrayList userdetails,int AccountType) {
        SavingsAccountModel sam=new SavingsAccountModel();
        
-            TransactionData=sam.viewTransactionsModel(userdetails);
+            TransactionData=sam.viewTransactionsModel(userdetails,AccountType);
             columnNames=(ArrayList) TransactionData.get(1);
             data=(ArrayList) TransactionData.get(2);
             
@@ -216,6 +219,32 @@ public class BSPController {
         BankModel model = new BankModel();
         return model.isBlockedisClosed(accountID);
     }
+
+    public String homeLoanAccount(ArrayList userdetails) {
+       Account t = new Account();
+        
+        AccountType="3";
+        AccountId = t.getAccountId(userdetails,AccountType);
+                
+        if (AccountId != null) {
+            
+            userdetails.add(AccountId);
+            HomeLoanAccountModel hm = new HomeLoanAccountModel();
+            HomeLoanDetails=hm.getAccountDetails(userdetails);
+            float amt=Float.parseFloat((String) HomeLoanDetails.get(3));
+            float rate=Float.parseFloat((String) HomeLoanDetails.get(2));
+            int months_num=(int) HomeLoanDetails.get(5);
+            Interest = (amt*rate*months_num)/14400;
+            String Int = String.valueOf(Interest);
+            HomeLoanDetails.add(Int);
+            HomeLoanAccountView hlv = new HomeLoanAccountView();
+            hlv.homeLoanAccountDetails(HomeLoanDetails,userdetails);
+            
+        } 
+        return AccountId;
+          }
+
+    
 
     
    

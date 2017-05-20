@@ -35,6 +35,7 @@ public class SavingsAccountView {
     private HashMap TransactionData = new HashMap();
     private Vector columnNamesVector = new Vector();
     private Vector dataVector = new Vector();
+    private int AccountType;
 
     public void viewpage(ArrayList userdetails) {
 
@@ -185,8 +186,9 @@ public class SavingsAccountView {
 
             ViewTransactionsButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    AccountType=1;
                     BSPController c = new BSPController();
-                    TransactionData = c.viewTransactionsController(userdetails);
+                    TransactionData = c.viewTransactionsController(userdetails,AccountType);
                     dataVector = (Vector) TransactionData.get(3);
                     columnNamesVector = (Vector) TransactionData.get(4);
                     JTable table = new JTable(dataVector, columnNamesVector) {

@@ -6,7 +6,6 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
-import bsp.Model.Account;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -87,6 +86,34 @@ public class UserView {
         });
 
         TermDepositAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                BSPController controller = new BSPController();
+                String Result = controller.termDepositAccount(userdetails);
+                if (Result == null) {
+                    JOptionPane.showMessageDialog(accountPanel, "Term Deposit Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
+
+                } else {
+                    frame.dispose();
+                }
+            }
+        });
+        
+        HomeLoanAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                BSPController controller = new BSPController();
+                String Result = controller.homeLoanAccount(userdetails);
+                if (Result == null) {
+                    JOptionPane.showMessageDialog(accountPanel, "Home Loan Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
+
+                } else {
+                    frame.dispose();
+                }
+            }
+        });
+        
+        CreditCardAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 BSPController controller = new BSPController();

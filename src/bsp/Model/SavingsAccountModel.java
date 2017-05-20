@@ -59,11 +59,12 @@ public class SavingsAccountModel {
         return true;
           }
 
-    public HashMap viewTransactionsModel(ArrayList userdetails) {
+    public HashMap viewTransactionsModel(ArrayList userdetails,int AccountType) {
         con = ConnectDB.getConnection();
         try {
             st = con.createStatement();
-            query = "select transaction_id as ID, transaction_dt as Date, transaction_type as Type, amount  from transactions where account_id=(select account_id from user_account where user_id = '" + userdetails.get(0) + "' and account_type_id=1 and isClosed=1 and isBlocked=1)";
+            query = "select transaction_id as ID, transaction_dt as Date, transaction_type as Type, amount  from transactions "
+                    + "where account_id=(select account_id from user_account where user_id = '" + userdetails.get(0) + "' and account_type_id="+AccountType+" and isClosed=1 and isBlocked=1)";
             ResultSet rs = st.executeQuery(query);
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
