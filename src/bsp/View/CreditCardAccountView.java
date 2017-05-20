@@ -9,9 +9,12 @@ import bsp.Controller.BSPController;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,10 +36,19 @@ public class CreditCardAccountView {
     private HashMap TransactionData = new HashMap();
     private Vector columnNamesVector = new Vector();
     private Vector dataVector = new Vector();
-    private int AccountType;
+    private int AccountType=4;
+    private String user_id;
+    private String amt;
+    private String CreditBal;
+    private ArrayList ar = new ArrayList();
 
-    public void viewpage(ArrayList userdetails) {
-
+    public void viewpage(ArrayList userdetails) throws SQLException {
+       
+        BSPController c = new BSPController();
+        user_id=(String) userdetails.get(0);
+        ar = c.getCreditDetails(user_id);
+        CreditBal = Integer.toString((int) ar.get(0));
+        
         JLabel UserNameLabel = new JLabel((String) userdetails.get(2));
         UserNameLabel.setBounds(370, 100, 100, 25);
 
@@ -57,7 +69,16 @@ public class CreditCardAccountView {
 
         JButton ViewTransactionsButton = new JButton("View all Transactions");
         ViewTransactionsButton.setBounds(400, 390, 200, 30);
+        
+        JLabel DailyLimit = new JLabel("Daily Limit - ");
+        DailyLimit.setBounds(700, 150, 100, 25);
 
+        JLabel DailyLimitVal = new JLabel(CreditBal);
+        DailyLimitVal.setBounds(800, 150, 300, 25);
+        
+        JButton ModifyDailyLimit = new JButton("Modify Daily Limit");
+        ModifyDailyLimit.setBounds(730, 180, 150, 25);
+        
         JButton LogOutButton = new JButton("Log out");
         LogOutButton.setBounds(950, 20, 80, 25);
 
@@ -75,6 +96,10 @@ public class CreditCardAccountView {
         SavingsPanel.add(CheckBalanceButton);
         SavingsPanel.add(ViewTransactionsButton);
         SavingsPanel.add(HomeButton);
+        SavingsPanel.add(DailyLimit);
+        SavingsPanel.add(DailyLimitVal);
+        SavingsPanel.add(ModifyDailyLimit);
+        
 
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,12 +131,34 @@ public class CreditCardAccountView {
 
                 }
             });
+            
+            
+            
+            ModifyDailyLimit.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String newAccountWithdrawString = (String)JOptionPane.showInputDialog(frame, "Please enter new Withdraw Limit: ", "Credit Withdraw Limit Edit", JOptionPane.PLAIN_MESSAGE, null, null, "0");
+                            int newAccountWithdrawInt = Integer.parseInt(newAccountWithdrawString);
+                            JOptionPane.showMessageDialog(frame, "New Account Limit: " + newAccountWithdrawInt);
+                            BSPController c=new BSPController();
+                           if(
+                                   c.modifyDailyLimit(userdetails,newAccountWithdrawInt, AccountType))
+                           {
+                               CreditCardAccountView cc = new CreditCardAccountView();
+                        try {
+                            cc.viewpage(userdetails);
+                            frame.dispose();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(CreditCardAccountView.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                           }
+                }
+            });
 
             CheckBalanceButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    BSPController c = new BSPController();
+                    
                     Balance = c.checkBalance(userdetails);
-                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
+                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Credit card balance is " + Balance, "Balance",
                             JOptionPane.INFORMATION_MESSAGE);
 
                 }
@@ -140,8 +187,8 @@ public class CreditCardAccountView {
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);
-                        if (c.withdrawAmount(userdetails, Amount) == true) {
-                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been credited with " + Amount + " successfully..!!", "Deposit",
+                        if (c.withdrawAmount(userdetails, Amount, AccountType) == true) {
+                            JOptionPane.showMessageDialog(SavingsPanel, "Your Credit card Account has been credited with " + Amount + " successfully..!!", "Deposit",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(SavingsPanel, "Unable to withdraw amount. Low Balance", "Balance",
@@ -166,8 +213,8 @@ public class CreditCardAccountView {
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);
-                        if (c.depositAmount(userdetails, Amount) == true) {
-                            JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been debited with " + Amount + " successfully..!!", "Deposit",
+                        if (c.depositAmount(userdetails, Amount, AccountType) == true) {
+                            JOptionPane.showMessageDialog(SavingsPanel, "Your Credit card Account has been debited with " + Amount + " successfully..!!", "Deposit",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(SavingsPanel, "Unable to deposit amount. Contact adminisrator", "Balance",
@@ -180,8 +227,7 @@ public class CreditCardAccountView {
             });
 
             ViewTransactionsButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    AccountType = 1;
+                public void actionPerformed(ActionEvent e) {                
                     BSPController c = new BSPController();
                     TransactionData = c.viewTransactionsController(userdetails, AccountType);
                     dataVector = (Vector) TransactionData.get(3);

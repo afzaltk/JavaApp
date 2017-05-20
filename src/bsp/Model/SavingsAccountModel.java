@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author Afzal
  */
 public class SavingsAccountModel {
-    
+
     private Connection con = null;
     private Statement st = null;
     private ResultSet rs = null;
@@ -29,14 +29,14 @@ public class SavingsAccountModel {
     private ArrayList data = new ArrayList();
     private HashMap TransactionData = new HashMap();
 
-    public boolean depositAmount(ArrayList userdetails, String Amount) {
+    public boolean depositAmount(ArrayList userdetails, String Amount, int AccountType) {
         con = ConnectDB.getConnection();
         try {
             st = con.createStatement();
             st.executeUpdate("INSERT INTO transactions (account_id, transaction_type, transaction_dt, amount)"
                     + " VALUES (" + userdetails.get(3) + ",'D',now()," + Amount + ")");
             st.executeUpdate("UPDATE current_balance SET current_balance=current_balance+" + Amount + " WHERE "
-                    + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=1 and user_id= '" + userdetails.get(0) + "')");
+                    + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=" + AccountType + " and user_id= '" + userdetails.get(0) + "')");
 
         } catch (SQLException ex) {
             Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,61 +44,50 @@ public class SavingsAccountModel {
         return true;
     }
 
-    public boolean withdrawAmount(ArrayList userdetails, int Amount) {
+    public boolean withdrawAmount(ArrayList userdetails, int Amount, int AccountType) {
         con = ConnectDB.getConnection();
         try {
             st = con.createStatement();
             st.executeUpdate("INSERT INTO transactions (account_id, transaction_type, transaction_dt, amount)"
                     + " VALUES (" + userdetails.get(3) + ",'C',now()," + Amount + ")");
             st.executeUpdate("UPDATE current_balance SET current_balance=current_balance-" + Amount + " WHERE "
-                    + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=1 and user_id= '" + userdetails.get(0) + "')");
+                    + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=" + AccountType + " and user_id= '" + userdetails.get(0) + "')");
 
         } catch (SQLException ex) {
             Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
-          }
+    }
 
-    public HashMap viewTransactionsModel(ArrayList userdetails,int AccountType) {
+    public HashMap viewTransactionsModel(ArrayList userdetails, int AccountType) {
         con = ConnectDB.getConnection();
         try {
             st = con.createStatement();
             query = "select transaction_id as ID, transaction_dt as Date, transaction_type as Type, amount  from transactions "
-                    + "where account_id=(select account_id from user_account where user_id = '" + userdetails.get(0) + "' and account_type_id="+AccountType+" and isClosed=1 and isBlocked=1)";
+                    + "where account_id=(select account_id from user_account where user_id = '" + userdetails.get(0) + "' and account_type_id=" + AccountType + " and isClosed=1 and isBlocked=1)";
             ResultSet rs = st.executeQuery(query);
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
-            for (int i = 1; i <= columns; i++)
-            {
-                columnNames.add( md.getColumnName(i) );
+            for (int i = 1; i <= columns; i++) {
+                columnNames.add(md.getColumnName(i));
             }
-            while (rs.next())
-            {
+            while (rs.next()) {
                 ArrayList row = new ArrayList(columns);
 
-                for (int i = 1; i <= columns; i++)
-                {
-                    row.add( rs.getObject(i) );
+                for (int i = 1; i <= columns; i++) {
+                    row.add(rs.getObject(i));
                 }
 
-                data.add( row );
+                data.add(row);
             }
-            TransactionData.put(1,columnNames);
-            TransactionData.put(2,data);
-            
-            
-            
+            TransactionData.put(1, columnNames);
+            TransactionData.put(2, data);
+
         } catch (SQLException ex) {
             Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
         }
         return TransactionData;
-        
+
     }
-
-    
-
-   
-
-    
 
 }

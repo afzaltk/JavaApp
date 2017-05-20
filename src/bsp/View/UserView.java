@@ -8,7 +8,10 @@ package bsp.View;
 import bsp.Controller.BSPController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -120,13 +123,17 @@ public class UserView {
         CreditCardAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                BSPController controller = new BSPController();
-                String Result = controller.creditCardAccount(userdetails);
-                if (Result == null) {
-                    JOptionPane.showMessageDialog(accountPanel, "Credit Card Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
-
-                } else {
-                    frame.dispose();
+                try {
+                    BSPController controller = new BSPController();
+                    String Result = controller.creditCardAccount(userdetails);
+                    if (Result == null) {
+                        JOptionPane.showMessageDialog(accountPanel, "Credit Card Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
+                        
+                    } else {
+                        frame.dispose();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserView.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

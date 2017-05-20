@@ -372,6 +372,7 @@ public class AdminView {
                             String newAccountWithdrawString = (String)JOptionPane.showInputDialog(frame, creditDailyWithdraw.getText() + " . Please enter new Withdraw Limit: ", "Credit Withdraw Limit Edit", JOptionPane.PLAIN_MESSAGE, null, null, "0");
                             int newAccountWithdrawInt = Integer.parseInt(newAccountWithdrawString);
                             JOptionPane.showMessageDialog(frame, "New Account Limit: " + newAccountWithdrawInt);
+                            
                         }
                         
                         if (savingsEditChoice.equals("Maximum Debt"))

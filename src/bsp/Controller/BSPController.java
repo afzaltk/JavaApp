@@ -7,6 +7,7 @@ package bsp.Controller;
 
 import bsp.Model.Account;
 import bsp.Model.BankModel;
+import bsp.Model.CreditCardAccountModel;
 import bsp.Model.HomeLoanAccountModel;
 import bsp.Model.SavingsAccountModel;
 import bsp.Model.TermDepositAccountModel;
@@ -180,9 +181,9 @@ public class BSPController {
     return false;
     }
 
-   public boolean depositAmount(ArrayList userdetails, String Amount) {
+   public boolean depositAmount(ArrayList userdetails, String Amount, int AccountType) {
        SavingsAccountModel sam=new SavingsAccountModel();
-      return (sam.depositAmount(userdetails,Amount));
+      return (sam.depositAmount(userdetails,Amount,AccountType));
       }
 	  
 	  public ArrayList accountStatus(String accountID) throws SQLException
@@ -197,7 +198,7 @@ public class BSPController {
         return model.getcreditcardDetails(userID);
     }
 
-    public boolean withdrawAmount(ArrayList userdetails, String Value) {
+    public boolean withdrawAmount(ArrayList userdetails, String Value, int AccountType) {
         int Amount = Integer.parseInt(Value);
         Account a=new Account();
         Balance=a.checkBalance(userdetails);
@@ -207,7 +208,7 @@ public class BSPController {
         }
         else{
             SavingsAccountModel sam=new SavingsAccountModel();
-            sam.withdrawAmount(userdetails,Amount);
+            sam.withdrawAmount(userdetails,Amount,AccountType);
         }
         return true;
     }
@@ -258,13 +259,12 @@ public class BSPController {
             String Int = String.valueOf(Interest);
             HomeLoanDetails.add(Int);
             HomeLoanAccountView hlv = new HomeLoanAccountView();
-            hlv.homeLoanAccountDetails(HomeLoanDetails,userdetails);
-            
+            hlv.homeLoanAccountDetails(HomeLoanDetails,userdetails);            
         } 
         return AccountId;
           }
 
-    public String creditCardAccount(ArrayList userdetails) {
+    public String creditCardAccount(ArrayList userdetails) throws SQLException {
         Account t = new Account();
         
         AccountType="4";
@@ -276,6 +276,12 @@ public class BSPController {
             c.viewpage(userdetails);
         } 
         return AccountId;
+    }
+
+    public boolean modifyDailyLimit(ArrayList userdetails, int newAccountWithdrawInt, int AccountType) {
+        CreditCardAccountModel cc = new CreditCardAccountModel();
+        
+       return cc.modifyDailyLimit(userdetails,newAccountWithdrawInt,AccountType);
     }
 
     

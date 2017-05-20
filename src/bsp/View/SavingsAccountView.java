@@ -35,7 +35,7 @@ public class SavingsAccountView {
     private HashMap TransactionData = new HashMap();
     private Vector columnNamesVector = new Vector();
     private Vector dataVector = new Vector();
-    private int AccountType;
+    private int AccountType = 1;
 
     public void viewpage(ArrayList userdetails) {
 
@@ -78,15 +78,12 @@ public class SavingsAccountView {
         SavingsPanel.add(ViewTransactionsButton);
         SavingsPanel.add(HomeButton);
 
-        
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1066, 577);
         frame.add(SavingsPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
-        
 
         try {
 
@@ -145,7 +142,7 @@ public class SavingsAccountView {
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);
-                        if (c.withdrawAmount(userdetails, Amount) == true) {
+                        if (c.withdrawAmount(userdetails, Amount, AccountType) == true) {
                             JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been credited with " + Amount + " successfully..!!", "Deposit",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -171,7 +168,7 @@ public class SavingsAccountView {
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);
-                        if (c.depositAmount(userdetails, Amount) == true) {
+                        if (c.depositAmount(userdetails, Amount, AccountType) == true) {
                             JOptionPane.showMessageDialog(SavingsPanel, "Your Account has been debited with " + Amount + " successfully..!!", "Deposit",
                                     JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -186,9 +183,9 @@ public class SavingsAccountView {
 
             ViewTransactionsButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    AccountType=1;
+                    AccountType = 1;
                     BSPController c = new BSPController();
-                    TransactionData = c.viewTransactionsController(userdetails,AccountType);
+                    TransactionData = c.viewTransactionsController(userdetails, AccountType);
                     dataVector = (Vector) TransactionData.get(3);
                     columnNamesVector = (Vector) TransactionData.get(4);
                     JTable table = new JTable(dataVector, columnNamesVector) {
