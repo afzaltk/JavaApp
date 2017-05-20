@@ -22,6 +22,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -37,11 +41,36 @@ public class LogInView {
         JLabel userIdLabel = new JLabel("User Id");
         userIdLabel.setBounds(400, 150, 80, 25);
         JTextField userId = new JTextField(20);
+        PlainDocument document = (PlainDocument) userId.getDocument();
+        document.setDocumentFilter(new DocumentFilter() {
+
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+
+                if (string.length() <= 10) {
+                    super.replace(fb, offset, length, text, attrs); //To change body of generated methods, choose Tools | Templates.
+                }
+            }
+
+        });
+        
         userId.setBounds(500, 150, 160, 25);
 
         JLabel passwordLabel = new JLabel("Password");
         passwordLabel.setBounds(400, 190, 80, 25);
         JPasswordField password = new JPasswordField(20);
+        document = (PlainDocument) password.getDocument();
+        document.setDocumentFilter(new DocumentFilter() {
+
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+
+                if (string.length() <= 10) {
+                    super.replace(fb, offset, length, text, attrs); //To change body of generated methods, choose Tools | Templates.
+                }
+            }
+
+        });
         password.setBounds(500, 190, 160, 25);
 
         JButton logInButton = new JButton("Log In");

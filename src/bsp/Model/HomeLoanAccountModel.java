@@ -29,12 +29,11 @@ public class HomeLoanAccountModel {
         try {
             st = con.createStatement();
            st = con.createStatement();
-            query = "SELECT loan_start_dt,loan_end_dt,interest_rate,loan_amount,nxt_payment_dt from home_loan_account where account_id="+userdetails.get(3);
+            query = "SELECT loan_start_dt,loan_end_dt,loan_amount,nxt_payment_dt from home_loan_account where account_id="+userdetails.get(3);
             ResultSet rs = st.executeQuery(query);
             rs.next();
             HomeLoanDetails.add(rs.getString("loan_start_dt"));
             HomeLoanDetails.add(rs.getString("loan_end_dt"));
-            HomeLoanDetails.add(rs.getString("interest_rate"));
             HomeLoanDetails.add(rs.getString("loan_amount"));
             HomeLoanDetails.add(rs.getString("nxt_payment_dt"));
             

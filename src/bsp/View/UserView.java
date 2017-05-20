@@ -15,6 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -117,9 +121,9 @@ public class UserView {
             public void actionPerformed(ActionEvent e) {
 
                 BSPController controller = new BSPController();
-                String Result = controller.termDepositAccount(userdetails);
+                String Result = controller.creditCardAccount(userdetails);
                 if (Result == null) {
-                    JOptionPane.showMessageDialog(accountPanel, "Term Deposit Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(accountPanel, "Credit Card Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
 
                 } else {
                     frame.dispose();
@@ -155,10 +159,11 @@ public class UserView {
             mainPage(UserDetails);
         } else {
             JPasswordField pf = new JPasswordField();
+        
             try{
             String Pin = JOptionPane.showInputDialog(
                     pf, null,
-                    "Enter the 4 digit PIN to continue.",
+                    "Enter the 6 digit PIN to continue.",
                     JOptionPane.OK_CANCEL_OPTION
             );
             

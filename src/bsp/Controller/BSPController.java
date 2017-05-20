@@ -11,6 +11,7 @@ import bsp.Model.HomeLoanAccountModel;
 import bsp.Model.SavingsAccountModel;
 import bsp.Model.TermDepositAccountModel;
 import bsp.View.AdminView;
+import bsp.View.CreditCardAccountView;
 import bsp.View.HomeLoanAccountView;
 import bsp.View.LogInView;
 import bsp.View.SavingsAccountView;
@@ -86,7 +87,26 @@ public class BSPController {
     
     public int getSavingsID(String userID) throws SQLException {
         BankModel model = new BankModel(); 	 	 	     
-        return model.getSavingsID(userID);
+        return model.getAccountID(userID, 1);
+    }
+	 public int getCreditID(String userID) throws SQLException {
+        BankModel model = new BankModel(); 	 	 	     
+        return model.getAccountID(userID, 4);
+    }
+    
+    public int getCredit(String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getBalance("Credit", userID);
+    }
+    
+    public ArrayList getHomeLoan (String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getHomeLoanDetails(userID);
+    }
+    
+    public ArrayList getTermDepositDetails (String userID) throws SQLException {
+        BankModel model = new BankModel();
+        return model.getTermDepositDetails(userID);
     }
 
 
@@ -113,8 +133,7 @@ public class BSPController {
         AccountType="2";
         AccountId = t.getAccountId(userdetails,AccountType);
                 
-        if (AccountId != null) {
-            
+        if (AccountId != null) {            
             userdetails.add(AccountId);
             TermDepositAccountView v = new TermDepositAccountView();
             v.viewpage(userdetails);
@@ -164,9 +183,19 @@ public class BSPController {
    public boolean depositAmount(ArrayList userdetails, String Amount) {
        SavingsAccountModel sam=new SavingsAccountModel();
       return (sam.depositAmount(userdetails,Amount));
-       
-       
-   }
+      }
+	  
+	  public ArrayList accountStatus(String accountID) throws SQLException
+    {
+        BankModel model = new BankModel();
+        return model.isBlockedisClosed(accountID);
+    }
+
+    public ArrayList getCreditDetails(String userID) throws SQLException
+    {
+        BankModel model = new BankModel();
+        return model.getcreditcardDetails(userID);
+    }
 
     public boolean withdrawAmount(ArrayList userdetails, String Value) {
         int Amount = Integer.parseInt(Value);
@@ -203,22 +232,14 @@ public class BSPController {
             
             for (int i = 0; i < columnNames.size(); i++ )
             columnNamesVector.add(columnNames.get(i));
-
             
             TransactionData.put(3,dataVector);
             TransactionData.put(4,columnNamesVector);
             
             return TransactionData;
-                    
-            
-            
             
     }
-	public ArrayList accountStatus(String accountID) throws SQLException
-    {
-        BankModel model = new BankModel();
-        return model.isBlockedisClosed(accountID);
-    }
+	
 
     public String homeLoanAccount(ArrayList userdetails) {
        Account t = new Account();
@@ -231,10 +252,9 @@ public class BSPController {
             userdetails.add(AccountId);
             HomeLoanAccountModel hm = new HomeLoanAccountModel();
             HomeLoanDetails=hm.getAccountDetails(userdetails);
-            float amt=Float.parseFloat((String) HomeLoanDetails.get(3));
-            float rate=Float.parseFloat((String) HomeLoanDetails.get(2));
-            int months_num=(int) HomeLoanDetails.get(5);
-            Interest = (amt*rate*months_num)/14400;
+            float amt=Float.parseFloat((String) HomeLoanDetails.get(2));
+            int months_num=(int) HomeLoanDetails.get(4);
+            Interest = (amt*5*months_num)/14400;
             String Int = String.valueOf(Interest);
             HomeLoanDetails.add(Int);
             HomeLoanAccountView hlv = new HomeLoanAccountView();
@@ -243,6 +263,20 @@ public class BSPController {
         } 
         return AccountId;
           }
+
+    public String creditCardAccount(ArrayList userdetails) {
+        Account t = new Account();
+        
+        AccountType="4";
+        AccountId = t.getAccountId(userdetails,AccountType);
+                
+        if (AccountId != null) {
+            userdetails.add(AccountId);
+            CreditCardAccountView c = new CreditCardAccountView();
+            c.viewpage(userdetails);
+        } 
+        return AccountId;
+    }
 
     
 

@@ -31,6 +31,7 @@ public class HomeLoanAccountView {
     private Vector columnNamesVector = new Vector();
     private Vector dataVector = new Vector();
     private int AccountType = 3;
+    private float Amt;
 
     public void homeLoanAccountDetails(ArrayList HomeLoanDetails, ArrayList userdetails) {
 
@@ -43,7 +44,7 @@ public class HomeLoanAccountView {
         JLabel Loan_Amt = new JLabel("Loan Amount");
         Loan_Amt.setBounds(300, 210, 100, 25);
 
-        JLabel Loan_amt_value = new JLabel((String) HomeLoanDetails.get(3));
+        JLabel Loan_amt_value = new JLabel((String) HomeLoanDetails.get(2));
         Loan_amt_value.setBounds(400, 210, 500, 25);
 
         JLabel LoanEndDate = new JLabel("Loan End Date");
@@ -52,28 +53,22 @@ public class HomeLoanAccountView {
         JLabel LoanEndDateVal = new JLabel((String) HomeLoanDetails.get(1));
         LoanEndDateVal.setBounds(400, 270, 500, 25);
 
-        JLabel InterestRt = new JLabel("Interest Rate (% per annum)");
-        InterestRt.setBounds(300, 330, 100, 25);
-
-        JLabel InterestRtVal = new JLabel((String) HomeLoanDetails.get(2));
-        InterestRtVal.setBounds(400, 330, 500, 25);
-
         JLabel NextPymntDt = new JLabel("Next Payment Date");
         NextPymntDt.setBounds(550, 150, 150, 25);
 
-        JLabel NextPymntDtVal = new JLabel((String) HomeLoanDetails.get(4));
+        JLabel NextPymntDtVal = new JLabel((String) HomeLoanDetails.get(3));
         NextPymntDtVal.setBounds(700, 150, 500, 25);
 
         JLabel InterestAmt = new JLabel("Monthly Interest");
         InterestAmt.setBounds(550, 210, 100, 25);
 
-        float amt = parseFloat((String) HomeLoanDetails.get(6));
+        Amt = parseFloat((String) HomeLoanDetails.get(6));
 
-        JLabel InterestAmtVal = new JLabel((String) HomeLoanDetails.get(6));
+        JLabel InterestAmtVal = new JLabel((String) HomeLoanDetails.get(5));
         InterestAmtVal.setBounds(700, 210, 500, 25);
 
         JButton ViewTransactionsButton = new JButton("View All Payments");
-        ViewTransactionsButton.setBounds(400, 390, 200, 30);
+        ViewTransactionsButton.setBounds(400, 330, 200, 30);
 
         JButton LogOutButton = new JButton("Log out");
         LogOutButton.setBounds(950, 20, 80, 25);
@@ -90,8 +85,6 @@ public class HomeLoanAccountView {
         accountPanel.add(Loan_amt_value);
         accountPanel.add(Loan_date);
         accountPanel.add(Loan_date_value);
-        accountPanel.add(InterestRt);
-        accountPanel.add(InterestRtVal);
         accountPanel.add(HomeButton);
         accountPanel.add(LogOutButton);
         accountPanel.add(NextPymntDtVal);
