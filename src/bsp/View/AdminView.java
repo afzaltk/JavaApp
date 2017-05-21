@@ -6,11 +6,14 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -18,14 +21,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class AdminView {
 
-    String givenuserID;
-    int givensavingsID;
-    int givencreditID;
-    int balance;
+    private String givenuserID;
+    private int givensavingsID;
+    private int givencreditID;
+    private int balance;
+    private HashMap UsersData = new HashMap();
+    private Vector columnNamesVector = new Vector();
+    private Vector dataVector = new Vector();
 
     public void welcomeUser(ArrayList userdetails) {
         JOptionPane.showMessageDialog(null, "Welcome " + userdetails.get(2) + "....!!", "Welcome", JOptionPane.PLAIN_MESSAGE);
@@ -35,7 +43,9 @@ public class AdminView {
     public void mainPage(ArrayList userdetails) {
 
         JButton CreateUserButton = new JButton("Create New User");
-        CreateUserButton.setBounds(400, 20, 200, 25);
+        CreateUserButton.setBounds(250, 30, 200, 25);
+        JButton ViewAllUsersButton = new JButton("View All Users");
+        ViewAllUsersButton.setBounds(550, 30, 200, 25);
         JLabel adminNameLabel = new JLabel("Current Admin: " + userdetails.get(2));
         adminNameLabel.setBounds(50, 20, 400, 25);
         JLabel userNameLabel = new JLabel("Please enter the UserID of the account you want to manage:");
@@ -115,6 +125,7 @@ public class AdminView {
         accountPanel.add(userConfirm);
         accountPanel.add(logOutButton);
         accountPanel.add(CreateUserButton);
+        accountPanel.add(ViewAllUsersButton);
 
         accountPanel.add(savingsManage);
         accountPanel.add(creditManage);
@@ -482,7 +493,40 @@ public class AdminView {
          CreateUserButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                     frame.dispose();        
-                    CreateUserView cuv=new CreateUserView();
+                    CreateUserView cuv=new CreateUserView(userdetails);
+            }
+        });
+         
+         ViewAllUsersButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                    BSPController c = new BSPController();
+                    UsersData = c.viewUserListController();
+                    dataVector = (Vector) UsersData.get(3);
+                    columnNamesVector = (Vector) UsersData.get(4);
+                    JTable table = new JTable(dataVector, columnNamesVector) {
+                        public Class getColumnClass(int column) {
+                            for (int row = 0; row < getRowCount(); row++) {
+                                Object o = getValueAt(row, column);
+
+                                if (o != null) {
+                                    return o.getClass();
+                                }
+                            }
+
+                            return Object.class;
+                        }
+                    };
+
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    JPanel buttonPanel = new JPanel();
+
+                    JFrame TransactionsFrame = new JFrame("All Users");
+                    TransactionsFrame.setSize(866, 477);
+                    TransactionsFrame.add(scrollPane);
+                    TransactionsFrame.add(buttonPanel, BorderLayout.SOUTH);
+                    TransactionsFrame.setLocationRelativeTo(null);
+                    TransactionsFrame.setVisible(true);
             }
         });
 

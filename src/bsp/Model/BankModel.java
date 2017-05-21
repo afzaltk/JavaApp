@@ -11,6 +11,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +28,9 @@ public class BankModel extends ConnectDB {
     private String query;
     private String userID;
     private String fname;
+    private ArrayList columnNames = new ArrayList();
+    private ArrayList data = new ArrayList();
+    private HashMap TransactionData = new HashMap();
 
     public ArrayList checkLogin(ArrayList creds) throws SQLException {
         con = ConnectDB.getConnection();
@@ -172,5 +178,71 @@ public class BankModel extends ConnectDB {
         ar.add(rs.getInt("term-amount"));
         ar.add(rs.getDate("early_withdrawal_dt"));
         return ar;
+    }
+
+    public String createUser(ArrayList UserInfo) {
+        con = ConnectDB.getConnection();
+        String userId=null;
+        try {
+            st = con.createStatement();
+            st.executeUpdate("INSERT INTO `user_details`( `fname`, `lname`, `email`, `address`, `ID`, `phone_number`) VALUES "
+                    + "('" + UserInfo.get(0) + "','" + UserInfo.get(1) + "','" + UserInfo.get(2) + "','" + UserInfo.get(4) + "','" + UserInfo.get(5) + "','" + UserInfo.get(3) + "')");
+            st.executeUpdate("INSERT INTO `user_account`(`user_id`, `account_type_id`, `isClosed`, `isBlocked`) VALUES "
+                    + "((select userid from user_details where ID='" + UserInfo.get(5) + "'),1,0,0),"
+                    + "((select userid from user_details where ID='" + UserInfo.get(5) + "'),2,0,0),"
+                    + "((select userid from user_details where ID='" + UserInfo.get(5) + "'),3,0,0),"
+                    + "((select userid from user_details where ID='" + UserInfo.get(5) + "'),4,0,0)");
+            st.executeUpdate("INSERT INTO `users`(`USERID`, `PASSWORD`, `ISADMIN`, `PIN`) VALUES "
+                    + "((select userid from user_details WHERE id ='" + UserInfo.get(5) + "' ),'password'," + UserInfo.get(6) + " ,123456)");
+
+            st.executeUpdate("INSERT INTO `current_balance`(`account_id`, `current_balance`) VALUES "
+                    + "((SELECT account_id from user_account where account_type_id=1 and"
+                    + "  user_id = (select userid from user_details where id='" + UserInfo.get(5) + "' )),0),"
+                    + "  ((SELECT account_id from user_account where account_type_id=2 and "
+                    + "  user_id = (select userid from user_details where id='" + UserInfo.get(5) + "' )),0),"
+                    + "  ((SELECT account_id from user_account where account_type_id=3 and "
+                    + "  user_id = (select userid from user_details where id='" + UserInfo.get(5) + "' )),0),"
+                    + "  ((SELECT account_id from user_account where account_type_id=4 and "
+                    + "  user_id = (select userid from user_details where id= '" + UserInfo.get(5) + "')),0)");
+            
+            ResultSet rs = st.executeQuery("select userid from user_details where id= '" + UserInfo.get(5) + "'");
+            rs.next();
+       
+            userId=rs.getString("userid");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return userId;
+    }
+
+    public HashMap viewUserListModel() {
+       con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            query = "select * from user_details";
+            ResultSet rs = st.executeQuery(query);
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            for (int i = 1; i <= columns; i++) {
+                columnNames.add(md.getColumnName(i));
+            }
+            while (rs.next()) {
+                ArrayList row = new ArrayList(columns);
+
+                for (int i = 1; i <= columns; i++) {
+                    row.add(rs.getObject(i));
+                }
+
+                data.add(row);
+            }
+            TransactionData.put(1, columnNames);
+            TransactionData.put(2, data);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return TransactionData;
     }
 }

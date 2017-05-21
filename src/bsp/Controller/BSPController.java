@@ -274,4 +274,30 @@ public class BSPController {
         }
         return false;
     }
+public String createUser(ArrayList UserInfo) {
+        BankModel b = new BankModel();
+         String userId=b.createUser(UserInfo);
+         return userId;
+           }
+
+    public HashMap viewUserListController() {
+       BankModel bm = new BankModel();
+        TransactionData = bm.viewUserListModel();
+        columnNames = (ArrayList) TransactionData.get(1);
+        data = (ArrayList) TransactionData.get(2);
+        for (int i = 0; i < data.size(); i++) {
+            ArrayList subArray = (ArrayList) data.get(i);
+            Vector subVector = new Vector();
+            for (int j = 0; j < subArray.size(); j++) {
+                subVector.add(subArray.get(j));
+            }
+            dataVector.add(subVector);
+        }
+        for (int i = 0; i < columnNames.size(); i++) {
+            columnNamesVector.add(columnNames.get(i));
+        }
+        TransactionData.put(3, dataVector);
+        TransactionData.put(4, columnNamesVector);
+        return TransactionData;
+    }
 }
