@@ -7,6 +7,7 @@ package bsp.View;
 
 import bsp.Controller.BSPController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -131,6 +133,8 @@ public class AdminView {
         creditEditButton.setBounds(650, 100, 200, 25);
 
         JPanel accountPanel = new JPanel();
+        
+        
 
         accountPanel.setLayout(null);
         accountPanel.add(adminNameLabel);
@@ -177,6 +181,11 @@ public class AdminView {
         accountPanel.add(termdepositBlockCloseLabel);
         accountPanel.add(termdepositEditButton);
 
+        accountPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/background.jpg")));
+        accountPanel.add(background);
+        background.setLayout(new FlowLayout());
+        
         JFrame frame = new JFrame("Banking Software Prototype");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -315,10 +324,14 @@ public class AdminView {
                                 JOptionPane.showMessageDialog(frame, "Error");
                             }
                     }
+                   
                     
                     
                 } catch (SQLException ex) {
                     Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                catch (NullPointerException exn) {
+                    Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, exn);
                 }
                 
             }        

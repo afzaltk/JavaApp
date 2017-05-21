@@ -6,9 +6,12 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,6 +59,11 @@ public class TermDepositAccountView extends UserView {
         TermDepositPanel.add(WithdrawAmountButton);
         TermDepositPanel.add(CheckBalanceButton);
         TermDepositPanel.add(HomeButton);
+        
+            TermDepositPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/test.jpg")));
+        TermDepositPanel.add(background);
+        background.setLayout(new FlowLayout());
 
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

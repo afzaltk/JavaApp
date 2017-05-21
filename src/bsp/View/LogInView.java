@@ -95,7 +95,7 @@ public class LogInView {
 
         
         loginPanel.setLayout(new BorderLayout());
-    JLabel background=new JLabel(new ImageIcon(getClass().getResource("/bsp/View/banking.jpg")));
+    JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/banking.jpg")));
     loginPanel.add(background);
     background.setLayout(new FlowLayout());
     frame.add(loginPanel);

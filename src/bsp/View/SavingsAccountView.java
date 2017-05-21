@@ -7,6 +7,7 @@ package bsp.View;
 
 import bsp.Controller.BSPController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -77,6 +78,11 @@ public class SavingsAccountView {
         SavingsPanel.add(CheckBalanceButton);
         SavingsPanel.add(ViewTransactionsButton);
         SavingsPanel.add(HomeButton);
+        
+        SavingsPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/test.jpg")));
+        SavingsPanel.add(background);
+        background.setLayout(new FlowLayout());
 
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,7 +128,7 @@ public class SavingsAccountView {
             TransferAmountButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        String newAccountTransferString = (String) JOptionPane.showInputDialog(frame, "Please enter Amount to Transfer ", "Svings Transfer", JOptionPane.PLAIN_MESSAGE, null, null, "0");
+                        String newAccountTransferString = (String) JOptionPane.showInputDialog(frame, "Please enter Amount to Transfer ", "Ssvings Transfer", JOptionPane.PLAIN_MESSAGE, null, null, "0");
                         int newAccountTransferInt = Integer.parseInt(newAccountTransferString);
                         int number = Integer.parseInt(newAccountTransferString);
                         int TransferToAccountType=4;
@@ -149,8 +155,8 @@ public class SavingsAccountView {
                     if (valid == true) {
                         JTextField tf = new JTextField();
                         String Amount = JOptionPane.showInputDialog(
-                                tf, null,
-                                "Enter the Amount to be withdrawn.",
+                                tf, 
+                                "Enter the Amount to be withdrawn.","Withdraw Amount",
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);
@@ -175,8 +181,8 @@ public class SavingsAccountView {
                     if (valid == true) {
                         JTextField tf = new JTextField();
                         String Amount = JOptionPane.showInputDialog(
-                                tf, null,
-                                "Enter the Amount to be deposited.",
+                                tf, 
+                                "Enter the Amount to be deposited.","Deposit Amount",
                                 JOptionPane.OK_CANCEL_OPTION
                         );
                         int number = Integer.parseInt(Amount);

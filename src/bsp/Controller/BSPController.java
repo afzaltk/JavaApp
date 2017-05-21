@@ -385,6 +385,7 @@ public class BSPController {
         AccountType = "3";
         AccountId = t.getAccountId(userdetails, AccountType);
         if (AccountId != null) {
+            System.out.println(AccountId);
             userdetails.add(AccountId);
             HomeLoanAccountModel hm = new HomeLoanAccountModel();
             HomeLoanDetails = hm.getAccountDetails(userdetails);

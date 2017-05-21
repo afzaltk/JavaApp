@@ -6,12 +6,15 @@
 package bsp.View;
 
 import bsp.Controller.BSPController;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -67,6 +70,11 @@ public class UserView {
         accountPanel.add(HomeLoanAccount);
         accountPanel.add(CreditCardAccount);
         accountPanel.add(logOutButton);
+        
+         accountPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/test.jpg")));
+        accountPanel.add(background);
+        background.setLayout(new FlowLayout());
 
         JFrame frame = new JFrame("Banking Software Prototype");
 
@@ -105,7 +113,7 @@ public class UserView {
                 }
             }
         });
-        
+
         HomeLoanAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -119,7 +127,7 @@ public class UserView {
                 }
             }
         });
-        
+
         CreditCardAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -128,7 +136,7 @@ public class UserView {
                     String Result = controller.creditCardAccount(userdetails);
                     if (Result == null) {
                         JOptionPane.showMessageDialog(accountPanel, "Credit Card Account does not exist or is  Blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
-                        
+
                     } else {
                         frame.dispose();
                     }
@@ -153,62 +161,59 @@ public class UserView {
         });
 
     }
-    
+
     boolean enterPin(ArrayList UserDetails, int Attempts) {
-        
-        valid=true;
+
+        valid = true;
         BSPController ct = new BSPController();
         if (Attempts == 0) {
             ct.blockAccount(UserDetails);
 
             JOptionPane.showMessageDialog(null, "Your all 3 attempts are over. Your account is now blocked. Contact Administrator", "Error", JOptionPane.ERROR_MESSAGE);
-            valid=false;
+            valid = false;
             mainPage(UserDetails);
         } else {
             JPasswordField pf = new JPasswordField();
-        
-            try{
-            String Pin = JOptionPane.showInputDialog(
-                    pf, null,
-                    "Enter the 6 digit PIN to continue.",
-                    JOptionPane.OK_CANCEL_OPTION
-            );
-            PlainDocument document = (PlainDocument) pf.getDocument();
-        document.setDocumentFilter(new DocumentFilter() {
 
-            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+            try {
+                String Pin = JOptionPane.showInputDialog(
+                        pf, null,
+                        "Enter the 6 digit PIN to continue.",
+                        JOptionPane.OK_CANCEL_OPTION
+                );
+                PlainDocument document = (PlainDocument) pf.getDocument();
+                document.setDocumentFilter(new DocumentFilter() {
 
-                if (string.length() <= 6) {
-                    super.replace(fb, offset, length, text, attrs); //To change body of generated methods, choose Tools | Templates.
+                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                        String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+
+                        if (string.length() <= 6) {
+                            super.replace(fb, offset, length, text, attrs); //To change body of generated methods, choose Tools | Templates.
+                        }
+                    }
+
+                });
+
+                int number = Integer.parseInt(Pin);
+
+                if (ct.verifyPin(UserDetails, Pin) == false) {
+
+                    Attempts = Attempts - 1;
+                    JOptionPane.showMessageDialog(null, "Wrong PIN. " + Attempts + " attempts left..!!", "Error", JOptionPane.ERROR_MESSAGE);
+                    UserView u = new UserView();
+                    u.enterPin(UserDetails, Attempts);
+
                 }
-            }
 
-        });
-            
-            int number = Integer.parseInt(Pin);
-            
-                    
-
-            if (ct.verifyPin(UserDetails, Pin) == false) {
-                
-                Attempts = Attempts - 1;
-                JOptionPane.showMessageDialog(null, "Wrong PIN. " + Attempts + " attempts left..!!", "Error", JOptionPane.ERROR_MESSAGE);
-                UserView u = new UserView();
-                u.enterPin(UserDetails, Attempts);
+            } catch (NumberFormatException en) {
+                JOptionPane.showMessageDialog(null, "Number not found! Please enter an Amount.", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
-            
-             } catch (NumberFormatException en) {
-            JOptionPane.showMessageDialog(null, "Number not found! Please enter an Amount.", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
-
-        }
-        
 
         return valid;
-        
+
     }
-       
+
 }

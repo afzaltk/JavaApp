@@ -7,6 +7,7 @@ package bsp.View;
 
 import bsp.Controller.BSPController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -99,6 +101,11 @@ public class CreditCardAccountView {
         SavingsPanel.add(DailyLimit);
         SavingsPanel.add(DailyLimitVal);
         SavingsPanel.add(ModifyDailyLimit);
+        
+        SavingsPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/test.jpg")));
+        SavingsPanel.add(background);
+        background.setLayout(new FlowLayout());
 
         JFrame frame = new JFrame("Banking Software Prototype");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

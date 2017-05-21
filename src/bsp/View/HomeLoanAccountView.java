@@ -7,12 +7,14 @@ package bsp.View;
 
 import bsp.Controller.BSPController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.Float.parseFloat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -62,7 +64,7 @@ public class HomeLoanAccountView {
         JLabel InterestAmt = new JLabel("Monthly Interest");
         InterestAmt.setBounds(550, 210, 100, 25);
 
-        Amt = parseFloat((String) HomeLoanDetails.get(6));
+        Amt = parseFloat((String) HomeLoanDetails.get(5));
 
         JLabel InterestAmtVal = new JLabel((String) HomeLoanDetails.get(5));
         InterestAmtVal.setBounds(700, 210, 500, 25);
@@ -92,6 +94,11 @@ public class HomeLoanAccountView {
         accountPanel.add(InterestAmt);
         accountPanel.add(InterestAmtVal);
         accountPanel.add(ViewTransactionsButton);
+
+         accountPanel.setLayout(new BorderLayout());
+        JLabel background=new JLabel(new ImageIcon(getClass().getResource("/img/test.jpg")));
+        accountPanel.add(background);
+        background.setLayout(new FlowLayout());
 
         JFrame frame = new JFrame("Banking Software Prototype");
 
