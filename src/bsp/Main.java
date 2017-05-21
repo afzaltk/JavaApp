@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         BSPController BSPController = new BSPController();
-        BSPController.loginControl();
+        BSPController.loginControl();//Calls the logincontrol in the controller
         
     }
     

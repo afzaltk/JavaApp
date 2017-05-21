@@ -78,9 +78,12 @@ public class TermDepositAccountModel {
                     + " VALUES ((SELECT account_id FROM user_account WHERE account_type_id=1 and user_id= " + userdetails.get(0) + "),'D',now()," + Withdrawal_amount + ")");
 
             st.executeUpdate("UPDATE term_deposit_account SET early_withdrawal_dt=now() WHERE account_id=" + userdetails.get(3) );
-            st.executeUpdate("UPDATE user_account SET isClosed=0 WHERE account_id=" + userdetails.get(3) );
+            
             st.executeUpdate("UPDATE current_balance SET current_balance=current_balance+" + Withdrawal_amount + " WHERE "
                     + "account_id=(SELECT account_id FROM user_account WHERE account_type_id=1 and user_id= '" + userdetails.get(0) + "')");
+            st.executeUpdate("UPDATE current_balance SET current_balance=0 WHERE account_id=" + userdetails.get(3));
+            st.executeUpdate("UPDATE user_account SET isClosed=0 WHERE account_id=" + userdetails.get(3) );
+
 
         } catch (SQLException ex) {
             Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);

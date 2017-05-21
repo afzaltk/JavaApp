@@ -173,6 +173,18 @@ public class UserView {
                     "Enter the 6 digit PIN to continue.",
                     JOptionPane.OK_CANCEL_OPTION
             );
+            PlainDocument document = (PlainDocument) pf.getDocument();
+        document.setDocumentFilter(new DocumentFilter() {
+
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                String string = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+
+                if (string.length() <= 6) {
+                    super.replace(fb, offset, length, text, attrs); //To change body of generated methods, choose Tools | Templates.
+                }
+            }
+
+        });
             
             int number = Integer.parseInt(Pin);
             

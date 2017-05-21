@@ -121,10 +121,22 @@ public class SavingsAccountView {
 
             TransferAmountButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    BSPController c = new BSPController();
-                    Balance = c.checkBalance(userdetails);
-                    JOptionPane.showMessageDialog(SavingsPanel, "Your current Savings balance is " + Balance, "Balance",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        String newAccountTransferString = (String) JOptionPane.showInputDialog(frame, "Please enter Amount to Transfer ", "Svings Transfer", JOptionPane.PLAIN_MESSAGE, null, null, "0");
+                        int newAccountTransferInt = Integer.parseInt(newAccountTransferString);
+                        int number = Integer.parseInt(newAccountTransferString);
+                        int TransferToAccountType=4;
+                        BSPController c = new BSPController();
+                        if (c.transferAmount(userdetails, newAccountTransferInt, AccountType,TransferToAccountType)){
+                            JOptionPane.showMessageDialog(frame, "Amount " + newAccountTransferInt+" Transferred to your Credit Account");
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(frame, "Error : Unable to Transfer amount","Error",JOptionPane.ERROR_MESSAGE);
+                        }
+                    }  catch (NumberFormatException en) {
+                        JOptionPane.showMessageDialog(frame, "Number not found! Please enter an Amount.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                    }
 
                 }
             });

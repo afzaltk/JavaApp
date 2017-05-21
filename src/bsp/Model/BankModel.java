@@ -26,26 +26,6 @@ public class BankModel extends ConnectDB {
     private String userID;
     private String fname;
 
-    public String getUserId() {
-        return userID;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
-
-    public void setUserId(String userId) {
-
-        this.userID = userId;
-    }
-
-    
-	
-
     public ArrayList checkLogin(ArrayList creds) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
@@ -67,9 +47,8 @@ public class BankModel extends ConnectDB {
         creds.add("error");
         return creds;
     }
-	
-	public ArrayList isBlockedisClosed(String accountID) throws SQLException
-    {
+
+    public ArrayList isBlockedisClosed(String accountID) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         ArrayList blockedClosedArray = new ArrayList();
@@ -79,27 +58,24 @@ public class BankModel extends ConnectDB {
         blockedClosedArray.add((res.getInt("isClosed")));
         return blockedClosedArray;
     }
-    
+
     public ArrayList getAccounts(String userID) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         ArrayList<String> s = new ArrayList<>();
         String query1 = "SELECT `account_type_id` FROM `user_account` WHERE user_id = '" + userID + "'";
         ResultSet rs = st.executeQuery(query1);
-        while (rs.next())
-        {
+        while (rs.next()) {
             s.add(rs.getString("account_type_id"));
         }
         return s;
     }
-    
-    public int getBalance(String acctype, String userID) throws SQLException
-    {
+
+    public int getBalance(String acctype, String userID) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         int i = 0;
-        if (acctype.equals("Savings"))
-        {
+        if (acctype.equals("Savings")) {
             ResultSet rs = st.executeQuery("SELECT `account_id`, `user_id` FROM `user_account` WHERE `account_type_id` = 1 AND `user_id` = '" + userID + "'");
             rs.next();
             int accountNumber = rs.getInt("account_id");
@@ -107,9 +83,8 @@ public class BankModel extends ConnectDB {
             rs2.next();
             int accountBalance = rs2.getInt("current_balance");
             i = accountBalance;
-        }		
-		if (acctype.equals("Credit"))
-        {
+        }
+        if (acctype.equals("Credit")) {
             ResultSet rs = st.executeQuery("SELECT `account_id`, `user_id` FROM `user_account` WHERE `account_type_id` = 4 AND `user_id` = '" + userID + "'");
             rs.next();
             int accountNumber = rs.getInt("account_id");
@@ -120,10 +95,8 @@ public class BankModel extends ConnectDB {
         }
         return i;
     }
-    
-    
-    
-     public ArrayList getUser(String userID) throws SQLException {
+
+    public ArrayList getUser(String userID) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         ArrayList<String> s = new ArrayList<>();
@@ -142,67 +115,62 @@ public class BankModel extends ConnectDB {
         s.add(rs.getString("ID"));
         s.add(Integer.toString(rs.getInt("phone_number")));
 
-        if (s.isEmpty())
-        {
+        if (s.isEmpty()) {
             s.add("There are " + cc + " result coloumns.");
         }
         return s;
-     }
-	 
-	  public int getAccountID(String userID, int acctype) throws SQLException {
+    }
+
+    public int getAccountID(String userID, int acctype) throws SQLException {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         ResultSet rs = st.executeQuery("SELECT `account_id` FROM `user_account` WHERE `account_type_id` = " + acctype + " AND `user_id` = '" + userID + "'");
         rs.next();
         return rs.getInt("account_id");
     }
-    
-     
-     public ArrayList getcreditcardDetails(String userID) throws SQLException
-     {
-         con = ConnectDB.getConnection();
-         st = con.createStatement();
-         int creditID = this.getAccountID(userID, 4);
-         String q = "SELECT `daily_limit`, `maximum_debt` FROM `credit_card_account` WHERE `account_id` = '" + creditID + "'";
-         ResultSet rs = st.executeQuery(q);
-         ArrayList ar = new ArrayList();
-         rs.next();
-         ar.add(rs.getInt("daily_limit"));
-         ar.add(rs.getInt("maximum_debt"));
-         return ar;
-     }
-     
-     public ArrayList getHomeLoanDetails (String userID) throws SQLException
-     {
-         con = ConnectDB.getConnection();
-         st = con.createStatement();
-         int homeloanID = this.getAccountID(userID, 3);
-         String q = "SELECT * FROM `home_loan_account` WHERE `account_id` = '" + homeloanID + "'";
-         ResultSet rs = st.executeQuery(q);
-         ArrayList ar = new ArrayList();
-         rs.next();
-         ar.add(rs.getDate("loan_start_dt"));
-         ar.add(rs.getDate("loan_end_dt"));
-         ar.add(rs.getFloat("interest_rate"));
-         ar.add(rs.getInt("loan_amount"));
-         return ar;
-     }
-     
-     public ArrayList getTermDepositDetails (String userID) throws SQLException
-     {
-         con = ConnectDB.getConnection();
-         st = con.createStatement();
-         int termdepositID = this.getAccountID(userID, 2);
-         String q = "SELECT * FROM `term_deposit_account` WHERE `account_id` = '" + termdepositID + "'";
-         ResultSet rs = st.executeQuery(q);
-         ArrayList ar = new ArrayList();
-         rs.next();
-         ResultSetMetaData rsmd = rs.getMetaData();
-         ar.add(rs.getDate("term_start_dt"));
-         ar.add(rs.getDate("term_end_dt"));
-         ar.add(rs.getFloat("interest_rate"));
-         ar.add(rs.getInt("term-amount"));
-         ar.add(rs.getDate("early_withdrawal_dt"));
-         return ar;
-     }
+
+    public ArrayList getcreditcardDetails(String userID) throws SQLException {
+        con = ConnectDB.getConnection();
+        st = con.createStatement();
+        int creditID = this.getAccountID(userID, 4);
+        String q = "SELECT `daily_limit`, `maximum_debt` FROM `credit_card_account` WHERE `account_id` = '" + creditID + "'";
+        ResultSet rs = st.executeQuery(q);
+        ArrayList ar = new ArrayList();
+        rs.next();
+        ar.add(rs.getInt("daily_limit"));
+        ar.add(rs.getInt("maximum_debt"));
+        return ar;
+    }
+
+    public ArrayList getHomeLoanDetails(String userID) throws SQLException {
+        con = ConnectDB.getConnection();
+        st = con.createStatement();
+        int homeloanID = this.getAccountID(userID, 3);
+        String q = "SELECT * FROM `home_loan_account` WHERE `account_id` = '" + homeloanID + "'";
+        ResultSet rs = st.executeQuery(q);
+        ArrayList ar = new ArrayList();
+        rs.next();
+        ar.add(rs.getDate("loan_start_dt"));
+        ar.add(rs.getDate("loan_end_dt"));
+        ar.add(rs.getFloat("interest_rate"));
+        ar.add(rs.getInt("loan_amount"));
+        return ar;
+    }
+
+    public ArrayList getTermDepositDetails(String userID) throws SQLException {
+        con = ConnectDB.getConnection();
+        st = con.createStatement();
+        int termdepositID = this.getAccountID(userID, 2);
+        String q = "SELECT * FROM `term_deposit_account` WHERE `account_id` = '" + termdepositID + "'";
+        ResultSet rs = st.executeQuery(q);
+        ArrayList ar = new ArrayList();
+        rs.next();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        ar.add(rs.getDate("term_start_dt"));
+        ar.add(rs.getDate("term_end_dt"));
+        ar.add(rs.getFloat("interest_rate"));
+        ar.add(rs.getInt("term-amount"));
+        ar.add(rs.getDate("early_withdrawal_dt"));
+        return ar;
+    }
 }
