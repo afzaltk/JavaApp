@@ -54,7 +54,8 @@ public class BankModel extends ConnectDB {
         return creds;
     }
 
-    public ArrayList isBlockedisClosed(String accountID) throws SQLException {
+    public ArrayList isBlockedisClosed(int accountID) throws SQLException 
+	{
         con = ConnectDB.getConnection();
         st = con.createStatement();
         ArrayList blockedClosedArray = new ArrayList();
@@ -71,17 +72,20 @@ public class BankModel extends ConnectDB {
         ArrayList<String> s = new ArrayList<>();
         String query1 = "SELECT `account_type_id` FROM `user_account` WHERE user_id = '" + userID + "'";
         ResultSet rs = st.executeQuery(query1);
-        while (rs.next()) {
+        while (rs.next()) 
+		{
             s.add(rs.getString("account_type_id"));
         }
         return s;
     }
 
-    public int getBalance(String acctype, String userID) throws SQLException {
+    public int getBalance(String acctype, String userID) throws SQLException 
+	{
         con = ConnectDB.getConnection();
         st = con.createStatement();
         int i = 0;
-        if (acctype.equals("Savings")) {
+        if (acctype.equals("Savings"))
+		 {
             ResultSet rs = st.executeQuery("SELECT `account_id`, `user_id` FROM `user_account` WHERE `account_type_id` = 1 AND `user_id` = '" + userID + "'");
             rs.next();
             int accountNumber = rs.getInt("account_id");
@@ -90,7 +94,8 @@ public class BankModel extends ConnectDB {
             int accountBalance = rs2.getInt("current_balance");
             i = accountBalance;
         }
-        if (acctype.equals("Credit")) {
+        if (acctype.equals("Credit")) 
+		{
             ResultSet rs = st.executeQuery("SELECT `account_id`, `user_id` FROM `user_account` WHERE `account_type_id` = 4 AND `user_id` = '" + userID + "'");
             rs.next();
             int accountNumber = rs.getInt("account_id");
@@ -121,8 +126,9 @@ public class BankModel extends ConnectDB {
         s.add(rs.getString("ID"));
         s.add(Integer.toString(rs.getInt("phone_number")));
 
-        if (s.isEmpty()) {
-            s.add("There are " + cc + " result coloumns.");
+        if (s.isEmpty()) 
+		{
+           s.add("Empty result");
         }
         return s;
     }
@@ -135,7 +141,8 @@ public class BankModel extends ConnectDB {
         return rs.getInt("account_id");
     }
 
-    public ArrayList getcreditcardDetails(String userID) throws SQLException {
+    public ArrayList getcreditcardDetails(String userID) throws SQLException
+	 {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         int creditID = this.getAccountID(userID, 4);
@@ -148,7 +155,8 @@ public class BankModel extends ConnectDB {
         return ar;
     }
 
-    public ArrayList getHomeLoanDetails(String userID) throws SQLException {
+    public ArrayList getHomeLoanDetails(String userID) throws SQLException
+	 {
         con = ConnectDB.getConnection();
         st = con.createStatement();
         int homeloanID = this.getAccountID(userID, 3);
@@ -158,12 +166,14 @@ public class BankModel extends ConnectDB {
         rs.next();
         ar.add(rs.getDate("loan_start_dt"));
         ar.add(rs.getDate("loan_end_dt"));
-        ar.add(rs.getFloat("interest_rate"));
+       
         ar.add(rs.getInt("loan_amount"));
+		ar.add(rs.getDate("nxt_payment_dt"));
         return ar;
     }
 
-    public ArrayList getTermDepositDetails(String userID) throws SQLException {
+    public ArrayList getTermDepositDetails(String userID) throws SQLException 
+	{
         con = ConnectDB.getConnection();
         st = con.createStatement();
         int termdepositID = this.getAccountID(userID, 2);
@@ -245,4 +255,58 @@ public class BankModel extends ConnectDB {
         }
         return TransactionData;
     }
+	public ArrayList getUserDetails(String userID) throws SQLException
+     {
+         con = ConnectDB.getConnection();
+         st = con.createStatement();
+         ArrayList ar = new ArrayList();
+         String q1 = "SELECT `password`, `pin` FROM `users` WHERE `userid`='" + userID + "'";
+         ResultSet rs1 = st.executeQuery(q1);
+         rs1.next();
+         ar.add(rs1.getString("password"));
+         ar.add(rs1.getString("pin"));
+         String q2 = "SELECT * FROM `user_details` WHERE `userid`='" + userID + "'";
+         ResultSet rs2 = st.executeQuery(q2);
+         rs2.next();
+         ar.add(rs2.getString("fname"));
+         ar.add(rs2.getString("lname"));
+         ar.add(rs2.getString("email"));
+         ar.add(rs2.getString("address"));
+         ar.add(rs2.getInt("phone_number"));
+         return ar;
+     }
+     
+     public boolean setUserDetails(String userid, String detail, int i)
+     {
+         String q = "SELECT * FROM `users`";
+         switch (i)
+         {
+             case 1: q = "UPDATE `users` SET `password`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 2: q = "UPDATE `users` SET `pin`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 3: q = "UPDATE `user_details` SET `fname`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 4: q = "UPDATE `user_details` SET `lname`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 5: q = "UPDATE `user_details` SET `email`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 6: q = "UPDATE `user_details` SET `address`='" + detail + "' WHERE `userid`='" + userid + "'";
+             break;
+             case 7: q = "UPDATE `user_details` SET `phone_number`='" + detail + "' WHERE `userid`='" + userid + "'";
+         }
+
+         con = ConnectDB.getConnection();
+         
+         try {
+             st = con.createStatement();
+             st.executeUpdate(q);
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+         
+         return true;
+         
+     }
+
 }

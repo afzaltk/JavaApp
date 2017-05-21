@@ -20,6 +20,7 @@ import bsp.View.TermDepositAccountView;
 import bsp.View.UserView;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -90,7 +91,17 @@ public class BSPController {
         BankModel model = new BankModel();
         return model.getAccountID(userID, 4);
     }
-
+    
+    public int getHomeLoanID(String userID) throws SQLException {
+        BankModel model = new BankModel(); 	 	 	     
+        return model.getAccountID(userID, 3);
+    }
+    
+    public int getTermDepositID(String userID) throws SQLException {
+        BankModel model = new BankModel(); 	 	 	     
+        return model.getAccountID(userID, 2);
+    }
+    
     public int getCredit(String userID) throws SQLException {
         BankModel model = new BankModel();
         return model.getBalance("Credit", userID);
@@ -104,6 +115,148 @@ public class BSPController {
     public ArrayList getTermDepositDetails(String userID) throws SQLException {
         BankModel model = new BankModel();
         return model.getTermDepositDetails(userID);
+    }
+    
+    public boolean setBalance(int accNum, int newBalance)
+    {
+        Account ac = new Account();
+        return ac.setBalance(accNum, newBalance);
+    }
+    
+    public float getBalanceFloat(int accID)
+    {
+        Account ac = new Account();
+        return ac.checkBalanceString(accID);
+    }
+    
+    public boolean modifyTermDepositInterestRate(String userid, float newInterestRate) {
+        TermDepositAccountModel td = new TermDepositAccountModel();
+        return td.modifyTermDepositInterestRate(userid, newInterestRate);
+    }
+    
+    public boolean modifyTermDepositTotal(String userid, float newInterestRate) {
+        TermDepositAccountModel td = new TermDepositAccountModel();
+        return td.modifyTermDepositTotal(userid, newInterestRate);
+    }
+    
+    public boolean blockSavings(String userID)
+    {
+        SavingsAccountModel sa = new SavingsAccountModel();
+        return sa.modifyBlockedStatus(userID, 0);
+    }
+    public boolean unblockSavings(String userID)
+    {
+        SavingsAccountModel sa = new SavingsAccountModel();
+        return sa.modifyBlockedStatus(userID, 1);
+    }
+    public boolean closeSavings(String userID)
+    {
+        SavingsAccountModel sa = new SavingsAccountModel();
+        return sa.modifyClosedStatus(userID, 0);
+    }
+    public boolean uncloseSavings(String userID)
+    {
+        SavingsAccountModel sa = new SavingsAccountModel();
+        return sa.modifyClosedStatus(userID, 1);
+    }
+    
+    public boolean blockCredit(String userID)
+    {
+        CreditCardAccountModel ca = new CreditCardAccountModel();
+        return ca.modifyBlockedStatus(userID, 0);
+    }
+    public boolean unblockCredit(String userID)
+    {
+        CreditCardAccountModel ca = new CreditCardAccountModel();
+        return ca.modifyBlockedStatus(userID, 1);
+    }
+    public boolean closeCredit(String userID)
+    {
+        CreditCardAccountModel ca = new CreditCardAccountModel();
+        return ca.modifyClosedStatus(userID, 0);
+    }
+    public boolean uncloseCredit(String userID)
+    {
+        CreditCardAccountModel ca = new CreditCardAccountModel();
+        return ca.modifyClosedStatus(userID, 1);
+    }
+    
+    public boolean blockHomeLoan(String userID)
+    {
+        HomeLoanAccountModel ca = new HomeLoanAccountModel();
+        return ca.modifyBlockedStatus(userID, 0);
+    }
+    public boolean unblockHomeLoan(String userID)
+    {
+        HomeLoanAccountModel ca = new HomeLoanAccountModel();
+        return ca.modifyBlockedStatus(userID, 1);
+    }
+    public boolean closeHomeLoan(String userID)
+    {
+        HomeLoanAccountModel ca = new HomeLoanAccountModel();
+        return ca.modifyClosedStatus(userID, 0);
+    }
+    public boolean uncloseHomeLoan(String userID)
+    {
+        HomeLoanAccountModel ca = new HomeLoanAccountModel();
+        return ca.modifyClosedStatus(userID, 1);
+    }
+    
+    public boolean blockTermDeposit(String userID)
+    {
+        TermDepositAccountModel ca = new TermDepositAccountModel();
+        return ca.modifyBlockedStatus(userID, 0);
+    }
+    public boolean unblockTermDeposit(String userID)
+    {
+        TermDepositAccountModel ca = new TermDepositAccountModel();
+        return ca.modifyBlockedStatus(userID, 1);
+    }
+    public boolean closeTermDeposit(String userID)
+    {
+        TermDepositAccountModel ca = new TermDepositAccountModel();
+        return ca.modifyClosedStatus(userID, 0);
+    }
+    public boolean uncloseTermDeposit(String userID)
+    {
+        TermDepositAccountModel ca = new TermDepositAccountModel();
+        return ca.modifyClosedStatus(userID, 1);
+    }
+    
+    public boolean setHomeLoanStartDate(String userid, String d)
+    {
+        HomeLoanAccountModel hl = new HomeLoanAccountModel();
+        return hl.modifyStartDate(userid, d);
+    }
+    
+    public boolean setHomeLoanEndDate(String userid, String d)
+    {
+        HomeLoanAccountModel hl = new HomeLoanAccountModel();
+        return hl.modifyEndDate(userid, d);
+    }
+    
+    public boolean setHomeLoanNextDate(String userid, String d)
+    {
+        HomeLoanAccountModel hl = new HomeLoanAccountModel();
+        return hl.modifyNextDate(userid, d);
+    }
+    
+    public boolean setTermDepositStartDate(String userid, String d)
+    {
+        TermDepositAccountModel td = new TermDepositAccountModel();
+        return td.modifyStartDate(userid, d);
+    }
+    
+    public boolean setTermDepositEndDate(String userid, String d)
+    {
+        TermDepositAccountModel td = new TermDepositAccountModel();
+        return td.modifyEndDate(userid, d);
+    }
+    
+    public boolean setTermDepositWithdrawDate(String userid, String d)
+    {
+        TermDepositAccountModel td = new TermDepositAccountModel();
+        return td.modifyWithdrawDate(userid, d);
     }
 
     //for Savings account
@@ -180,7 +333,7 @@ public class BSPController {
         return (sam.depositAmount(userdetails, Amount, AccountType));
     }
 
-    public ArrayList accountStatus(String accountID) throws SQLException {
+    public ArrayList accountStatus(int accountID) throws SQLException {
         BankModel model = new BankModel();
         return model.isBlockedisClosed(accountID);
     }
@@ -264,6 +417,7 @@ public class BSPController {
         CreditCardAccountModel cc = new CreditCardAccountModel();
         return cc.modifyDailyLimit(userdetails, newAccountWithdrawInt, AccountType);
     }   
+	
 
     public boolean transferAmount(ArrayList userdetails, int newAccountTransferInt, int AccountType, int TransferToAccountType) {
         Account a=new Account();
@@ -274,6 +428,33 @@ public class BSPController {
         }
         return false;
     }
+	
+	public boolean modifyCreditDailyLimit(String userid, int newAccountLimitInt) {
+        CreditCardAccountModel cc = new CreditCardAccountModel();
+        return cc.modifyDailyLimit(userid,newAccountLimitInt);
+    }
+    
+    public boolean modifyCreditDebtLimit(String userid, int newAccountLimitInt) {
+        CreditCardAccountModel cc = new CreditCardAccountModel();
+        return cc.modifyMaxDebt(userid,newAccountLimitInt);
+    }
+    
+    public boolean modifyHomeLoanAmount(String userid, int newAccountLoanInt) {
+        HomeLoanAccountModel hl = new HomeLoanAccountModel();
+        return hl.modifyHomeLoanAmount(userid, newAccountLoanInt);
+    }
+    
+    public ArrayList getUserDetails(String userid) throws SQLException
+    {
+        BankModel model = new BankModel();
+        return model.getUserDetails(userid);
+    }
+    
+    public boolean setUserDetails(String userid, String detail, int i) {
+        BankModel model = new BankModel();
+        return model.setUserDetails(userid, detail, i);
+		}
+	
 public String createUser(ArrayList UserInfo) {
         BankModel b = new BankModel();
          String userId=b.createUser(UserInfo);

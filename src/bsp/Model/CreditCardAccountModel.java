@@ -37,5 +37,48 @@ public class CreditCardAccountModel {
         }
         return true;
     }
+	public boolean modifyDailyLimit(String userid, int newAccountWithdrawInt) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `credit_card_account` SET `daily_limit`=" + newAccountWithdrawInt + " WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '4' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyMaxDebt(String userid, int newAccountDebtInt) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `credit_card_account` SET `maximum_debt`=" + newAccountDebtInt + " WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '4' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyBlockedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isBlocked`=" + newStatus + " WHERE `account_type_id`= '4' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyClosedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isClosed`=" + newStatus + " WHERE `account_type_id`= '4' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
     
 }

@@ -89,5 +89,27 @@ public class SavingsAccountModel {
         return TransactionData;
 
     }
+    
+    public boolean modifyBlockedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isBlocked`=" + newStatus + " WHERE `account_type_id`= '1' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyClosedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isClosed`=" + newStatus + " WHERE `account_type_id`= '1' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
 
 }

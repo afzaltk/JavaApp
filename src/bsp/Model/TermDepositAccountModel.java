@@ -90,5 +90,81 @@ public class TermDepositAccountModel {
         }
         return true;
     }
+	public boolean modifyTermDepositInterestRate(String userid, float newInterestRate) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `term_deposit_account` SET `interest_rate`=" + newInterestRate + " WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '2' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyTermDepositTotal(String userid, float newInterestRate) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `term_deposit_account` SET `term-amount`=" + newInterestRate + " WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '2' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyStartDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `term_deposit_account` SET `term_start_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '2' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyEndDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `term_deposit_account` SET `term_end_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '2' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyWithdrawDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `term_deposit_account` SET `early_withdrawal_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '2' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyBlockedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isBlocked`=" + newStatus + " WHERE `account_type_id`= '2' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyClosedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isClosed`=" + newStatus + " WHERE `account_type_id`= '2' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
 
 }

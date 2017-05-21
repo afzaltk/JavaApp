@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +47,73 @@ public class HomeLoanAccountModel {
         }
         return HomeLoanDetails;
     }
+    
+    public boolean modifyHomeLoanAmount(String userid, int newAccountLoanInt) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `home_loan_account` SET `loan_amount`=" + newAccountLoanInt + " WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '3' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyStartDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `home_loan_account` SET `loan_start_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '3' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyEndDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `home_loan_account` SET `loan_end_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '3' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyNextDate(String userid, String d) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `home_loan_account` SET `nxt_payment_dt`='" + d + "' WHERE `account_id`=(SELECT `account_id` FROM `user_account` WHERE `account_type_id`= '3' and `user_id`= '" + userid + "')");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyBlockedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isBlocked`=" + newStatus + " WHERE `account_type_id`= '3' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    public boolean modifyClosedStatus(String userid, int newStatus) {
+      con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            st.executeUpdate("UPDATE `user_account` SET `isClosed`=" + newStatus + " WHERE `account_type_id`= '3' and `user_id`= '" + userid + "'");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
 
     
 

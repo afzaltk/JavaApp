@@ -80,6 +80,19 @@ public class Account {
         return Balance;
     }
 
+public float checkBalanceString(int accID) {
+        con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            query = "select current_balance from current_balance where account_id = '" + accID + "'";
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            Balance = rs.getFloat("current_balance");
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Balance;
+    }
     public boolean verifyPin(ArrayList userdetails, String pin) {
         con = ConnectDB.getConnection();
         try {
@@ -111,6 +124,19 @@ public class Account {
         }
         return valid;
     }
+	public boolean setBalance(int accNum, int newBalance) {
+        boolean valid = false;
+        con = ConnectDB.getConnection();
+        try {
+            st = con.createStatement();
+            query = "UPDATE `current_balance` SET `current_balance`=" + newBalance + " WHERE `account_id`=" + accNum;
+            st.executeUpdate(query);
+            valid = true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return valid;
+        }
 
     public boolean transferAmount(ArrayList userdetails, int newAccountTransferInt, int AccountType, int TransferToAccountType) {
        con = ConnectDB.getConnection();
